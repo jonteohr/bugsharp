@@ -10,21 +10,44 @@ public class BugZillaExample
     {
         _bugZilla = BugZilla.Create("URL_TO_BUGZILLA", "OPTIONAL_API_KEY");
 
-        GetBug(4650);
-
-        Console.ReadKey();
+        var bugInput = Console.ReadLine();
+        if(!int.TryParse(bugInput, out var bugId))
+            Console.WriteLine("Not a valid number");
+        
+        DoBugzillaStuff(bugId);
     }
 
-    private async void GetBug(int bugId)
+    private async void DoBugzillaStuff(int bugId)
     {
+        // Fetch the bug from bugzilla
         var bug = await _bugZilla.Bugs.GetBugAsync(bugId);
-        var comments = await _bugZilla.Comments.GetCommentsAsync(bug.Id);
 
-        Console.WriteLine(comments.Count + " comments");
+        Console.WriteLine($"Bug ID: {bug.Id}");
+        Console.WriteLine($"Summary: {bug.Summary}");
+
+        // Make a change to the bug
+        bug.Summary = "It's another title!";
+        // Save it to the server
+        await bug.SaveChangesAsync();
         
+        // Get all comments on that bug
+        var comments = await _bugZilla.Comments.GetCommentsAsync(bugId);
+        
+        // Iterate through each comment, starting on the first
         foreach (var comment in comments)
         {
-            Console.WriteLine(comment.Text);
+            Console.WriteLine($"Comment ID: {comment.Id}");
+            Console.WriteLine($"Comment: {comment.Text}");
+            
+            if (comment.AttachmentId != -1)
+            {
+                // Comment has attachment, let's get it
+                var attachment = await _bugZilla.Attachments.GetAttachmentAsync(comment.AttachmentId);
+                
+                // Let's download it
+                var download = attachment.Download(Path.GetTempPath());
+                Console.WriteLine($"Downloaded to: {download}");
+            }
         }
     }
 }
