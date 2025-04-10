@@ -15,6 +15,7 @@
         <AssemblyName>Jonteohr.BugSharp</AssemblyName>
         <RootNamespace>BugSharp</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/jonteohr/bugsharp</RepositoryUrl>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
