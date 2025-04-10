@@ -1,7 +1,15 @@
 ﻿namespace BugSharp
 {
+    /// <summary>
+    /// Settings for bugzilla client
+    /// </summary>
     public class BugZillaSettings
     {
+        /// <summary>
+        /// Create new bugzilla settings
+        /// </summary>
+        /// <param name="url">The url to the remote bugzilla server</param>
+        /// <param name="apiKey">The API key to use for calls</param>
         public BugZillaSettings(string url, string apiKey)
         {
             BugZillaUrl = url;

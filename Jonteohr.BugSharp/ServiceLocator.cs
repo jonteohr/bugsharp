@@ -3,12 +3,15 @@ using System.Collections.Concurrent;
 
 namespace BugSharp
 {
+    /// <summary>
+    /// The main object that handles service registration and handling
+    /// </summary>
     public class ServiceLocator
     {
         private readonly ConcurrentDictionary<Type, object> _services;
         private readonly ConcurrentDictionary<Type, object> _factories;
         
-        public ServiceLocator()
+        internal ServiceLocator()
         {
             _services = new ConcurrentDictionary<Type, object>();
             _factories = new ConcurrentDictionary<Type, object>();
@@ -19,7 +22,7 @@ namespace BugSharp
         /// </summary>
         public TService Get<TService>()
         {
-            Type serviceType = typeof(TService);
+            var serviceType = typeof(TService);
             object factoryObj = null;
             object serviceObj = null;
 

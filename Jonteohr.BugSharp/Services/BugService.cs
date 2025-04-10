@@ -1,9 +1,13 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using BugSharp.Exceptions;
+using BugSharp.Remote;
+using Newtonsoft.Json;
 
 namespace BugSharp.Services
 {
-    public class BugService : BaseRequestClient, IBugService
+    internal class BugService : BaseRequestClient, IBugService
     {
         private readonly BugZilla _bugZilla;
         
@@ -11,13 +15,41 @@ namespace BugSharp.Services
         {
             _bugZilla = bugZilla;
         }
-
+        
         public async Task<Bug> GetBugAsync(int bugId)
         {
-            var jsonResult = await GetAsync("bug/" + bugId, _bugZilla.Settings.ApiKey);
+            var jsonResult = await GetAsync(Endpoints.Bug, bugId, _bugZilla.Settings.ApiKey);
+            var response = JsonConvert.DeserializeObject<BugResponse>(jsonResult);
 
-            Console.WriteLine(jsonResult);
-            return new Bug();
+            if (response.Bugs.Count < 1)
+                throw new BugNotFoundException($"Bug {bugId} not found.");
+            
+            var bug = new Bug(_bugZilla, response.Bugs.FirstOrDefault());
+            
+            return bug;
+        }
+
+        public async Task UpdateBugAsync(Bug bug)
+        {
+            var json = JsonConvert.SerializeObject(bug);
+            await PutAsync(Endpoints.Bug, bug.Id, json, _bugZilla.Settings.ApiKey);
+        }
+
+        public async Task<int> CreateBugAsync(Bug bug)
+        {
+            var json = JsonConvert.SerializeObject(bug);
+            var response = await PostAsync(Endpoints.Bug, json, _bugZilla.Settings.ApiKey);
+
+            var dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(response);
+            if (dict.TryGetValue("id", out var idObj))
+            {
+                if (int.TryParse(idObj.ToString(), out var id))
+                {
+                    return id;
+                }
+            }
+
+            return -1;
         }
     }
 }

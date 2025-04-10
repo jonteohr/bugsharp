@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
+using BugSharp.Remote;
 using RestSharp;
 
 namespace BugSharp
 {
-    public abstract class BaseRequestClient
+    internal abstract class BaseRequestClient
     {
         private readonly BugZillaSettings _settings;
         
@@ -12,13 +14,49 @@ namespace BugSharp
             _settings = settings;
         }
         
-        internal async Task<string> GetAsync(string endPoint, string apiKey = null)
+        internal async Task<string> GetAsync(Endpoints endPoint, string apiKey = null)
         {
             var client = new RestClient(_settings.BugZillaUrl);
-            var req = new RestRequest("/rest/" + endPoint, Method.Get);
+            var req = new RestRequest("/rest/" + endPoint.ToUri(), Method.Get);
             if(!string.IsNullOrEmpty(apiKey))
                 req.AddQueryParameter("api_key", apiKey);
         
+            var response = await client.ExecuteAsync(req);
+            return response.Content;
+        }
+        
+        internal async Task<string> GetAsync(Endpoints endPoint, int id, string apiKey = null)
+        {
+            var client = new RestClient(_settings.BugZillaUrl);
+            var req = new RestRequest("/rest/" + endPoint.ToUri(id), Method.Get);
+            if(!string.IsNullOrEmpty(apiKey))
+                req.AddQueryParameter("api_key", apiKey);
+        
+            var response = await client.ExecuteAsync(req);
+            return response.Content;
+        }
+
+        internal async Task<bool> PutAsync(Endpoints endpoint, int id, string json, string apiKey = null)
+        {
+            var client = new RestClient(_settings.BugZillaUrl);
+            var req = new RestRequest("/rest/" + endpoint.ToUri(id), Method.Put);
+            if(!string.IsNullOrEmpty(apiKey))
+                req.AddQueryParameter("api_key", apiKey);
+
+            req.AddJsonBody(json);
+            var response = await client.ExecuteAsync(req);
+            return response.StatusCode == HttpStatusCode.OK;
+        }
+
+        internal async Task<string> PostAsync(Endpoints endpoint, string json, string apiKey = null)
+        {
+            var client = new RestClient(_settings.BugZillaUrl);
+            var req = new RestRequest("/rest/" + endpoint.ToUri(), Method.Post);
+            if(!string.IsNullOrEmpty(apiKey))
+                req.AddQueryParameter("api_key", apiKey);
+            
+            req.AddJsonBody(json);
+
             var response = await client.ExecuteAsync(req);
             return response.Content;
         }

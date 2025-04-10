@@ -1,8 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.csproj", "{499280D2-39BB-4500-A108-B1591BFCA496}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jonteohr.BugSharp", "Jonteohr.BugSharp\bugsharp.csproj", "{499280D2-39BB-4500-A108-B1591BFCA496}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bugsharp", "Jonteohr.BugSharp\bugsharp.csproj", "{7AB60D8A-8A09-4660-B73B-073DC1AED79C}"
+EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,5 +15,9 @@ Global
 		{499280D2-39BB-4500-A108-B1591BFCA496}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{499280D2-39BB-4500-A108-B1591BFCA496}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{499280D2-39BB-4500-A108-B1591BFCA496}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AB60D8A-8A09-4660-B73B-073DC1AED79C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AB60D8A-8A09-4660-B73B-073DC1AED79C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AB60D8A-8A09-4660-B73B-073DC1AED79C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AB60D8A-8A09-4660-B73B-073DC1AED79C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
