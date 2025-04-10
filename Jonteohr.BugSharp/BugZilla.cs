@@ -47,11 +47,22 @@ namespace BugSharp
         /// <summary>
         /// The service for working with comments
         /// </summary>
-        public ICommentsService Comments
+        public ICommentService Comments
         {
             get
             {
-                return Services.Get<ICommentsService>();
+                return Services.Get<ICommentService>();
+            }
+        }
+
+        /// <summary>
+        /// The service that handles attachments
+        /// </summary>
+        public IAttachmentService Attachments
+        {
+            get
+            {
+                return Services.Get<IAttachmentService>();
             }
         }
 
@@ -96,10 +107,27 @@ namespace BugSharp
             return new Bug(this);
         }
 
+        /// <summary>
+        /// Returns a new Comment that when saved will be created on the remote BugZilla server
+        /// </summary>
+        public Comment CreateComment()
+        {
+            return new Comment(this);
+        }
+
+        /// <summary>
+        /// Returns a new Attachment that when saved will be created on the remote BugZilla server
+        /// </summary>
+        public Attachment CreateAttachment()
+        {
+            return new Attachment(this);
+        }
+
         private static void ConfigureDefaultServices(ServiceLocator service, BugZilla bugZilla)
         {
             service.Register<IBugService>(() => new BugService(bugZilla));
-            service.Register<ICommentsService>(() => new CommentService(bugZilla));
+            service.Register<ICommentService>(() => new CommentService(bugZilla));
+            service.Register<IAttachmentService>(() => new AttachmentService(bugZilla));
         }
     }
 }

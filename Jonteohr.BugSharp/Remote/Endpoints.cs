@@ -3,7 +3,8 @@
     internal enum Endpoints
     {
         Bug,
-        Comment
+        Comment,
+        Attachment
     }
     
     internal static class EndpointsExtension 
@@ -16,6 +17,8 @@
                     return "bug/" + (bugId != -1 ? bugId.ToString() : "");
                 case Endpoints.Comment:
                     return "bug/" + bugId + "/comment";
+                case Endpoints.Attachment:
+                    return "bug/attachment/" + bugId;
                 default:
                     return string.Empty;
             }

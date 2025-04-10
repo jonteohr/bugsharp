@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace BugSharp.Services
 {
-    internal class CommentService : BaseRequestClient, ICommentsService
+    internal class CommentService : BaseRequestClient, ICommentService
     {
         private readonly BugZilla _bugZilla;
         

@@ -7,7 +7,7 @@ namespace BugSharp
     /// <summary>
     /// The service for working with comments
     /// </summary>
-    public interface ICommentsService
+    public interface ICommentService
     {
         /// <summary>
         /// Get all comments connected to a bug
