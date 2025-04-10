@@ -26,3 +26,17 @@ Then to fetch a bug:
 var bug = await client.Bugs.GetBugAsync(123);
 Console.WriteLine($"Bug summary: {bug.Summary}");
 ```
+
+## Supports
+List of implemented API calls from [Bugzilla Rest API](https://bugzilla.readthedocs.io/en/5.2/api/core/v1/index.html)
+- ✅ Attachments
+- ✅ Bugs
+- ❌ Bugzilla Information
+- ❌ Classifications
+- ✅ Comments
+- ❌ Components
+- ❌ Bug Fields
+- ❌ Flag Types
+- ❌ Groups
+- ❌ Products
+- ❌ Users

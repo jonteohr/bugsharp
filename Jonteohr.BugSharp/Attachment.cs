@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using BugSharp.Remote;
 
@@ -48,7 +50,7 @@ namespace BugSharp
             Creator = remoteAttachment.creator;
             IsPrivate = remoteAttachment.is_private;
             BugId = remoteAttachment.bug_id;
-            Flags = remoteAttachment.flags;
+            Flags = remoteAttachment.flags.ToList();
             Comment = remoteAttachment.comment;
         }
         
@@ -115,7 +117,7 @@ namespace BugSharp
         /// <summary>
         /// Array of objects, each containing the information about the flag currently set for each attachment. Each flag object contains items descibed in the Flag object below.
         /// </summary>
-        public object[] Flags { get; set; }
+        public List<Flag> Flags { get; set; }
         
         /// <summary>
         /// A comment to add along with this attachment.

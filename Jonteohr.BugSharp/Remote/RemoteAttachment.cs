@@ -16,7 +16,7 @@ namespace BugSharp.Remote
         public string creator { get; set; }
         public bool is_private { get; set; }
         public int bug_id { get; set; }
-        public object[] flags { get; set; }
+        public Flag[] flags { get; set; }
         public string comment { get; set; }
     }
 }
