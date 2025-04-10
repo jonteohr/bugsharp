@@ -4,7 +4,8 @@
     {
         Bug,
         Comment,
-        Attachment
+        Attachment,
+        Component
     }
     
     internal static class EndpointsExtension 
@@ -19,6 +20,8 @@
                     return "bug/" + bugId + "/comment";
                 case Endpoints.Attachment:
                     return "bug/attachment/" + bugId;
+                case Endpoints.Component:
+                    return "component";
                 default:
                     return string.Empty;
             }

@@ -34,7 +34,7 @@ List of implemented API calls from [Bugzilla Rest API](https://bugzilla.readthed
 - ❌ Bugzilla Information
 - ❌ Classifications
 - ✅ Comments
-- ❌ Components
+- ✅ Components
 - ❌ Bug Fields
 - ❌ Flag Types
 - ❌ Groups

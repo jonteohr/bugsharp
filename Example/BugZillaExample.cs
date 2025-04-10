@@ -49,5 +49,18 @@ public class BugZillaExample
                 Console.WriteLine($"Downloaded to: {download}");
             }
         }
+        
+        // Now let's create our own component
+        var component = _bugZilla.CreateComponent();
+        // Fill the component with required fields
+        component.Name = "New Component";
+        component.Product = "TestProduct";
+        component.Description = "This is a test component.";
+        component.DefaultAssignee = "dkl@mozilla.com";
+        
+        // Save it to the server
+        var componentId = await component.SaveChangesAsync(); // Can also be achieved with: _bugZilla.Components.CreateComponentAsync(component);
+        if(componentId != 1) // Returns -1 if failed, otherwise it returns the id of the new component
+            Console.WriteLine($"Component ID: {componentId}");
     }
 }

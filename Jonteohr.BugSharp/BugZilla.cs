@@ -67,6 +67,17 @@ namespace BugSharp
         }
 
         /// <summary>
+        /// The service that handles components
+        /// </summary>
+        public IComponentService Components
+        {
+            get
+            {
+                return Services.Get<IComponentService>();
+            }
+        }
+
+        /// <summary>
         /// The ServiceLocator handling all services.
         /// </summary>
         public ServiceLocator Services
@@ -123,11 +134,20 @@ namespace BugSharp
             return new Attachment(this);
         }
 
+        /// <summary>
+        /// Returns a new Component that when saved will be created on the remote BugZilla server
+        /// </summary>
+        public Component CreateComponent()
+        {
+            return new Component(this);
+        }
+
         private static void ConfigureDefaultServices(ServiceLocator service, BugZilla bugZilla)
         {
             service.Register<IBugService>(() => new BugService(bugZilla));
             service.Register<ICommentService>(() => new CommentService(bugZilla));
             service.Register<IAttachmentService>(() => new AttachmentService(bugZilla));
+            service.Register<IComponentService>(() => new ComponentService(bugZilla));
         }
     }
 }
