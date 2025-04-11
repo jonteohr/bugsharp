@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace BugSharp.Remote
 {
