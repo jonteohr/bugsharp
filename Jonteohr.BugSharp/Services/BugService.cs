@@ -65,7 +65,7 @@ namespace BugSharp.Services
             var param = searchQuery.ToQueryString();
             var jsonResponse = await GetAsync(Endpoints.BugSearch, param, _bugZilla.Settings.ApiKey);
             var response = JsonConvert.DeserializeObject<BugResponse>(jsonResponse);
-
+            
             if (response.Bugs == null || response.Bugs.Count < 1)
                 return new List<Bug>();
             

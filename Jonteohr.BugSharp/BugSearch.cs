@@ -176,13 +176,16 @@ namespace BugSharp
                     continue;
 
                 // Convert array to URL-string
-                if (value is int[] intArrayValue && intArrayValue.Length != 0)
+                if (value is int[] intArrayValue)
                 {
-                    value = string.Join(",", intArrayValue);
-                }
-                else // If empty, skip it
-                {
-                    continue;
+                    if (intArrayValue.Length > 0)
+                    {
+                        value = string.Join(",", intArrayValue);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
                 
                 // Check for the custom QueryNameAttribute
