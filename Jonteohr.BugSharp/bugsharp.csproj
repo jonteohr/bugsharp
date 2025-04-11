@@ -4,7 +4,7 @@
         <TargetFrameworks>net9.0;net8.0;net481;net48;net472</TargetFrameworks>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>jonteohr.bugsharp</PackageId>
-        <Version>9.0.4</Version>
+        <Version>9.0.4-alpha1</Version>
         <Title>Jonteohr.BugSharp</Title>
         <Authors>jonteohr</Authors>
         <Description>Basic C# wrapper for the BugZilla Rest API  </Description>
