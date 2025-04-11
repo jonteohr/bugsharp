@@ -19,20 +19,20 @@ namespace BugSharp
         /// <summary>
         /// Gets several bugs matching the IDs specified
         /// </summary>
-        /// <param name="ids">A array of integers with bug IDs</param>
-        /// <returns>A list of Bugs</returns>
+        /// <param name="ids">An array of integers with bug IDs</param>
+        /// <returns>A <see cref="List{T}"/> of <see cref="Bug"/></returns>
         Task<List<Bug>> GetBugsAsync(int[] ids);
         
         /// <summary>
         /// Update a bug and save it on the remove server
         /// </summary>
-        /// <param name="bug">The modified bug object</param>
+        /// <param name="bug">The modified <see cref="Bug"/> object</param>
         Task UpdateBugAsync(Bug bug);
         
         /// <summary>
         /// Create a new bug on the BugZilla remote server
         /// </summary>
-        /// <param name="bug">The bug object to create.</param>
+        /// <param name="bug">The <see cref="Bug"/> object to create.</param>
         /// <returns>The Bug ID if successful, otherwise -1</returns>
         Task<int> CreateBugAsync(Bug bug);
 
@@ -40,7 +40,7 @@ namespace BugSharp
         /// Search for bugs matching a query
         /// </summary>
         /// <param name="searchQuery">The search query</param>
-        /// <returns>List of bugs</returns>
+        /// <returns><see cref="List{T}"/> of <see cref="Bug"/></returns>
         Task<List<Bug>> SearchBugsAsync(BugSearch searchQuery);
     }
 }
