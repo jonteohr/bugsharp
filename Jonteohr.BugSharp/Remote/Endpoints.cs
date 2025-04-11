@@ -3,6 +3,7 @@
     internal enum Endpoints
     {
         Bug,
+        BugSearch,
         Comment,
         Attachment,
         Component
@@ -24,6 +25,16 @@
                     return "component";
                 default:
                     return string.Empty;
+            }
+        }
+        
+        public static string ToUri(this Endpoints endpoint, string urlParams)
+        {
+            switch (endpoint)
+            {
+                default:
+                case Endpoints.BugSearch:
+                    return "bug?" + urlParams;
             }
         }
     }

@@ -142,6 +142,15 @@ namespace BugSharp
             return new Component(this);
         }
 
+        /// <summary>
+        /// Returns a new BugSearch instance that can be used to search for existing bugs on the remote server.
+        /// </summary>
+        /// <returns></returns>
+        public BugSearch CreateSearch()
+        {
+            return new BugSearch(this);
+        }
+
         private static void ConfigureDefaultServices(ServiceLocator service, BugZilla bugZilla)
         {
             service.Register<IBugService>(() => new BugService(bugZilla));

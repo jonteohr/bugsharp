@@ -29,6 +29,14 @@ namespace BugSharp.Services
             return bug;
         }
 
+        public async Task<List<Bug>> GetBugsAsync(int[] ids)
+        {
+            var search = _bugZilla.CreateSearch();
+            search.Id = ids;
+
+            return await search.SearchBugsAsync();
+        }
+
         public async Task UpdateBugAsync(Bug bug)
         {
             var json = JsonConvert.SerializeObject(bug);
@@ -50,6 +58,18 @@ namespace BugSharp.Services
             }
 
             return -1;
+        }
+
+        public async Task<List<Bug>> SearchBugsAsync(BugSearch searchQuery)
+        {
+            var param = searchQuery.ToQueryString();
+            var jsonResponse = await GetAsync(Endpoints.BugSearch, param, _bugZilla.Settings.ApiKey);
+            var response = JsonConvert.DeserializeObject<BugResponse>(jsonResponse);
+
+            if (response.Bugs == null || response.Bugs.Count < 1)
+                return new List<Bug>();
+            
+            return response.Bugs.Select(bug => new Bug(_bugZilla, bug)).ToList();
         }
     }
 }
