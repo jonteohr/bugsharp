@@ -78,6 +78,17 @@ namespace BugSharp
         }
 
         /// <summary>
+        /// THe service that handles bug fields
+        /// </summary>
+        public IFieldService Fields
+        {
+            get
+            {
+                return Services.Get<IFieldService>();
+            }
+        }
+
+        /// <summary>
         /// The ServiceLocator handling all services.
         /// </summary>
         public ServiceLocator Services
@@ -157,6 +168,7 @@ namespace BugSharp
             service.Register<ICommentService>(() => new CommentService(bugZilla));
             service.Register<IAttachmentService>(() => new AttachmentService(bugZilla));
             service.Register<IComponentService>(() => new ComponentService(bugZilla));
+            service.Register<IFieldService>(() => new FieldService(bugZilla));
         }
     }
 }

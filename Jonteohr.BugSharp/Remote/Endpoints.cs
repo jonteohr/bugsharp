@@ -6,23 +6,26 @@
         BugSearch,
         Comment,
         Attachment,
-        Component
+        Component,
+        Field
     }
     
     internal static class EndpointsExtension 
     {
-        public static string ToUri(this Endpoints endpoint, int bugId = -1)
+        public static string ToUri(this Endpoints endpoint, int id = -1)
         {
             switch (endpoint)
             {
                 case Endpoints.Bug:
-                    return "bug/" + (bugId != -1 ? bugId.ToString() : "");
+                    return "bug/" + (id != -1 ? id.ToString() : "");
                 case Endpoints.Comment:
-                    return "bug/" + bugId + "/comment";
+                    return "bug/" + id + "/comment";
                 case Endpoints.Attachment:
-                    return "bug/attachment/" + bugId;
+                    return "bug/attachment/" + id;
                 case Endpoints.Component:
                     return "component";
+                case Endpoints.Field:
+                    return "field/bug/" + (id != -1 ? id.ToString() : "");
                 default:
                     return string.Empty;
             }
@@ -32,6 +35,8 @@
         {
             switch (endpoint)
             {
+                case Endpoints.Field:
+                    return "field/bug/" + urlParams;
                 default:
                 case Endpoints.BugSearch:
                     return "bug?" + urlParams;
