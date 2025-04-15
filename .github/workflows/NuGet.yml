@@ -23,10 +23,16 @@ jobs:
         run: dotnet restore
 
       - name: Extract version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "PACKAGE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          else
+            git fetch --tags
+            echo "PACKAGE_VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_ENV
+          fi
 
       - name: Build and generate NuGet package
-        run: dotnet build --configuration Release /p:GeneratePackageOnBuild=true /p:Version=${{ env.VERSION }}
+        run: dotnet build --configuration Release /p:GeneratePackageOnBuild=true /p:Version=${{ env.PACKAGE_VERSION }}
         
       - name: Test
         run: dotnet test --no-build --verbosity normal
