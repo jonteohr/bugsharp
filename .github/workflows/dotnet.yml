@@ -5,9 +5,9 @@ name: .NET
 
 on:
   pull_request:
-    types: [opened,reopened]
+    types: [opened,reopened,synchronize]
   push:
-    branches: [master]
+    branches: [master,release/**]
 
 jobs:
   build:

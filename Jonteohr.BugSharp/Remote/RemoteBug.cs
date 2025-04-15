@@ -1,48 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace BugSharp.Remote
 {
     public class RemoteBug
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         
-        public string Summary { get; set; }
+        public string summary { get; set; }
         
-        public string Status { get; set; }
+        public string status { get; set; }
         
-        public string Priority { get; set; }
+        public string priority { get; set; }
         
-        public string Product { get; set; }
+        public string product { get; set; }
         
-        public string Resolution { get; set; }
+        public string resolution { get; set; }
         
         public string qa_contact { get; set; }
         
-        public string Version { get; set; }
+        public string version { get; set; }
         
-        public List<string> Cc { get; set; }
+        public List<string> cc { get; set; }
         
-        public string Platform { get; set; }
+        public string platform { get; set; }
         
-        public string Classification { get; set; }
+        public string classification { get; set; }
         
         public bool is_open { get; set; }
         
         public string assigned_to { get; set; }
         
-        public string Component  { get; set; }
+        public string component  { get; set; }
         
-        public bool IsConfirmed { get; set; }
+        public bool is_confirmed { get; set; }
         
         public DateTime creation_time { get; set; }
         
         public DateTime last_change_time { get; set; }
         
-        public string Creator { get; set; }
+        public string creator { get; set; }
         
-        public string Severity { get; set; }
+        public string severity { get; set; }
         public string target_milestone { get; set; }
 
         [JsonExtensionData]

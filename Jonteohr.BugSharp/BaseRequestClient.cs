@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BugSharp.Remote;
 using RestSharp;
 
@@ -47,7 +46,7 @@ namespace BugSharp
             return response.Content;
         }
 
-        internal async Task<bool> PutAsync(Endpoints endpoint, int id, string json, string apiKey = null)
+        internal async Task<string> PutAsync(Endpoints endpoint, int id, string json, string apiKey = null)
         {
             var client = new RestClient(_settings.BugZillaUrl);
             var req = new RestRequest("/rest/" + endpoint.ToUri(id), Method.Put);
@@ -56,7 +55,7 @@ namespace BugSharp
 
             req.AddJsonBody(json);
             var response = await client.ExecuteAsync(req);
-            return response.StatusCode == HttpStatusCode.OK;
+            return response.Content;
         }
 
         internal async Task<string> PostAsync(Endpoints endpoint, string json, string apiKey = null)

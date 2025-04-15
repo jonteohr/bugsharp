@@ -56,7 +56,7 @@ List of implemented API calls from [Bugzilla Rest API](https://bugzilla.readthed
 - ❌ Classifications
 - ✅ Comments
 - ✅ Components
-- ❌ Bug Fields
+- ✅ Bug Fields
 - ❌ Flag Types
 - ❌ Groups
 - ❌ Products

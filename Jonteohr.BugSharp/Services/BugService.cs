@@ -39,13 +39,13 @@ namespace BugSharp.Services
 
         public async Task UpdateBugAsync(Bug bug)
         {
-            var json = JsonConvert.SerializeObject(bug);
+            var json = bug.SerializeChanges();
             await PutAsync(Endpoints.Bug, bug.Id, json, _bugZilla.Settings.ApiKey);
         }
 
         public async Task<int> CreateBugAsync(Bug bug)
         {
-            var json = JsonConvert.SerializeObject(bug);
+            var json = JsonConvert.SerializeObject(bug.ToRemoteBug());
             var response = await PostAsync(Endpoints.Bug, json, _bugZilla.Settings.ApiKey);
 
             var dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(response);
@@ -65,7 +65,7 @@ namespace BugSharp.Services
             var param = searchQuery.ToQueryString();
             var jsonResponse = await GetAsync(Endpoints.BugSearch, param, _bugZilla.Settings.ApiKey);
             var response = JsonConvert.DeserializeObject<BugResponse>(jsonResponse);
-
+            
             if (response.Bugs == null || response.Bugs.Count < 1)
                 return new List<Bug>();
             

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BugSharp.Remote;
+using Newtonsoft.Json;
 
 namespace BugSharp
 {
@@ -36,27 +38,27 @@ namespace BugSharp
         {
             _originalBug = remoteBug;
 
-            Id = remoteBug.Id;
-            Summary = remoteBug.Summary;
-            Status = remoteBug.Status;
-            Priority = remoteBug.Priority;
-            Product = remoteBug.Product;
-            Resolution = remoteBug.Resolution;
+            Id = remoteBug.id;
+            Summary = remoteBug.summary;
+            Status = remoteBug.status;
+            Priority = remoteBug.priority;
+            Product = remoteBug.product;
+            Resolution = remoteBug.resolution;
             QAContact = remoteBug.qa_contact;
-            Version = remoteBug.Version;
-            Cc = remoteBug.Cc;
-            Platform = remoteBug.Platform;
-            Classification = remoteBug.Classification;
+            Version = remoteBug.version;
+            Cc = remoteBug.cc;
+            Platform = remoteBug.platform;
+            Classification = remoteBug.classification;
             IsOpen = remoteBug.is_open;
             AssignedTo = remoteBug.assigned_to;
-            Component = remoteBug.Component;
-            IsConfirmed = remoteBug.IsConfirmed;
+            Component = remoteBug.component;
+            IsConfirmed = remoteBug.is_confirmed;
             Created = remoteBug.creation_time;
             Changed = remoteBug.last_change_time;
-            Creator = remoteBug.Creator; // TODO Change this to a custom class with more information on the creator
-            Severity = remoteBug.Severity;
+            Creator = remoteBug.creator; // TODO Change this to a custom class with more information on the creator
+            Severity = remoteBug.severity;
             TargetMilestone = remoteBug.target_milestone;
-            CustomFields = remoteBug.CustomFields;
+            CustomFields = new Dictionary<string, object>(remoteBug.CustomFields);
         }
 
         /// <summary>
@@ -171,7 +173,7 @@ namespace BugSharp
         public async Task<Bug> SaveChangesAsync()
         {
             Bug serverBug;
-            if (string.IsNullOrEmpty(_originalBug.Id.ToString()))
+            if (string.IsNullOrEmpty(_originalBug.id.ToString()))
             {
                 var newKey = await _bugZilla.Bugs.CreateBugAsync(this);
                 serverBug = await _bugZilla.Bugs.GetBugAsync(newKey);
@@ -179,10 +181,126 @@ namespace BugSharp
             else
             {
                 await _bugZilla.Bugs.UpdateBugAsync(this);
-                serverBug = await _bugZilla.Bugs.GetBugAsync(_originalBug.Id);
+                serverBug = await _bugZilla.Bugs.GetBugAsync(_originalBug.id);
+            }
+            
+            return serverBug;
+        }
+
+        internal string SerializeChanges()
+        {
+            var changes = CompareToRemote();
+            if (changes.Count == 0)
+                return string.Empty;
+
+            var jsonSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+            var json = JsonConvert.SerializeObject(changes, jsonSettings);
+
+            return json;
+        }
+
+        internal RemoteBug ToRemoteBug()
+        {
+            return new RemoteBug
+            {
+                id = Id,
+                summary = Summary,
+                status = Status,
+                priority = Priority,
+                product = Product,
+                resolution = Resolution,
+                assigned_to = AssignedTo,
+                creation_time = Created,
+                is_open = IsOpen,
+                last_change_time = Changed,
+                qa_contact = QAContact,
+                target_milestone = TargetMilestone,
+                cc = Cc,
+                classification = Classification,
+                component = Component,
+                is_confirmed = IsConfirmed,
+                creator = Creator,
+                platform = Platform,
+                severity = Severity,
+                CustomFields = CustomFields,
+                version = Version
+            };
+        }
+
+        private Dictionary<string, object> CompareToRemote()
+        {
+            var diffs = new Dictionary<string, object>();
+
+            void Compare<T>(T current, T original, string remoteName)
+            {
+                if (!EqualityComparer<T>.Default.Equals(current, original))
+                {
+                    diffs[remoteName] = current;
+                }
             }
 
-            return serverBug;
+            Compare(Summary, _originalBug.summary, "summary");
+            Compare(Status, _originalBug.status, "status");
+            Compare(Priority, _originalBug.priority, "priority");
+            Compare(Product, _originalBug.product, "product");
+            Compare(Resolution, _originalBug.resolution, "resolution");
+            Compare(QAContact, _originalBug.qa_contact, "qa_contact");
+            Compare(Version, _originalBug.version, "version");
+
+            if (!AreListsEqual(Cc, _originalBug.cc))
+                diffs["cc"] = Cc;
+
+            Compare(Platform, _originalBug.platform, "platform");
+            Compare(Classification, _originalBug.classification, "classification");
+            Compare(IsOpen, _originalBug.is_open, "is_open");
+            Compare(AssignedTo, _originalBug.assigned_to, "assigned_to");
+            Compare(Component, _originalBug.component, "component");
+            Compare(IsConfirmed, _originalBug.is_confirmed, "is_confirmed");
+            Compare(Creator, _originalBug.creator, "creator");
+            Compare(Severity, _originalBug.severity, "severity");
+            Compare(TargetMilestone, _originalBug.target_milestone, "target_milestone");
+
+            if (_originalBug.CustomFields == null && CustomFields != null)
+            {
+                foreach (var kvp in CustomFields)
+                {
+                    diffs[kvp.Key] = kvp.Value;
+                }
+            }
+            else if (CustomFields != null)
+            {
+                foreach (var kvp in CustomFields)
+                {
+                    if (!_originalBug.CustomFields.TryGetValue(kvp.Key, out var originalVal) || !DeepEquals(originalVal, kvp.Value))
+                    {
+                        diffs[kvp.Key] = kvp.Value;
+                    }
+                }
+            }
+
+            return diffs;
+            
+            bool DeepEquals(object a, object b)
+            {
+                if (a == null && b == null) return true;
+                if (a == null || b == null) return false;
+
+                // Fallback: serialize both and compare the strings
+                var aJson = JsonConvert.SerializeObject(a);
+                var bJson = JsonConvert.SerializeObject(b);
+                return aJson == bJson;
+            }
+        }
+
+        private static bool AreListsEqual<T>(List<T> a, List<T> b)
+        {
+            if (a == null && b == null) return true;
+            if (a == null || b == null) return false;
+            if (a.Count != b.Count) return false;
+            return a.SequenceEqual(b);
         }
     }
 }
