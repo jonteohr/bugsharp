@@ -13,7 +13,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - run: cd Jonteohr.BugSharp/
         
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -22,6 +21,7 @@ jobs:
       
       - name: Restore dependencies
         run: dotnet restore
+        working-directory: Jonteohr.BugSharp
 
       - name: Extract version
         run: |
@@ -34,9 +34,12 @@ jobs:
 
       - name: Build and generate NuGet package
         run: dotnet build bugsharp.csproj --configuration Release /p:GeneratePackageOnBuild=true /p:Version=${{ env.PACKAGE_VERSION }}
+        working-directory: Jonteohr.BugSharp
         
       - name: Test
         run: dotnet test --no-build --verbosity normal
+        working-directory: Jonteohr.BugSharp
         
       - name: Push to NuGet
         run: dotnet nuget push ./bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API }} --source https://api.nuget.org/v3/index.json
+        working-directory: Jonteohr.BugSharp
