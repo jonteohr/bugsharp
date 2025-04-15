@@ -25,6 +25,11 @@ var client = BugZilla.Create("URL_TO_BUGZILLA", "OPTIONAL_API_KEY");
 ```csharp
 var bug = await client.Bugs.GetBugAsync(123); // 123 being a single bug ID
 Console.WriteLine($"Bug summary: {bug.Summary}");
+
+// Make a modification to the bug
+bug.Summary = "A new summary, because you're worth it.";
+// Save it to the server
+var newBug = await bug.SaveChangesAsync();
 ```
 
 #### Get several bugs:
