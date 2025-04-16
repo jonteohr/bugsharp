@@ -52,6 +52,12 @@ var results = await search.SearchBugsAsync();
 Console.WriteLine($"Found {results.Count} bugs matching the search criteria!");
 ```
 
+#### Get server information
+```csharp
+var version = await client.Information.GetVersion();
+Console.WriteLine(version);
+```
+
 ## Supports
 List of implemented API calls from [Bugzilla Rest API](https://bugzilla.readthedocs.io/en/5.2/api/core/v1/index.html)
 - ✅ Attachments
