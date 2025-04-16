@@ -57,7 +57,7 @@ List of implemented API calls from [Bugzilla Rest API](https://bugzilla.readthed
 - ✅ Attachments
 - ✅ Bugs
   - ✅ Bug Search
-- ❌ Bugzilla Information
+- ✅ Bugzilla Information
 - ❌ Classifications
 - ✅ Comments
 - ✅ Components

@@ -78,13 +78,24 @@ namespace BugSharp
         }
 
         /// <summary>
-        /// THe service that handles bug fields
+        /// The service that handles bug fields
         /// </summary>
         public IFieldService Fields
         {
             get
             {
                 return Services.Get<IFieldService>();
+            }
+        }
+
+        /// <summary>
+        /// Used to get general configuration information about the remote Bugzilla instance
+        /// </summary>
+        public IBugzillaInformation Information
+        {
+            get
+            {
+                return Services.Get<IBugzillaInformation>();
             }
         }
 
@@ -169,6 +180,7 @@ namespace BugSharp
             service.Register<IAttachmentService>(() => new AttachmentService(bugZilla));
             service.Register<IComponentService>(() => new ComponentService(bugZilla));
             service.Register<IFieldService>(() => new FieldService(bugZilla));
+            service.Register<IBugzillaInformation>(() => new BugzillaService(bugZilla));
         }
     }
 }
