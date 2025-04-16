@@ -32,6 +32,9 @@ jobs:
             echo "PACKAGE_VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_ENV
           fi
 
+      - name: Add GitHub NuGet source
+        run: dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --name github --username ${{ github.actor }} --password ${{ secrets.GH_PACKAGES_TOKEN }} --store-password-in-clear-text
+
       - name: Build and generate NuGet package
         run: dotnet build bugsharp.csproj --configuration Release /p:GeneratePackageOnBuild=true /p:Version=${{ env.PACKAGE_VERSION }}
         working-directory: Jonteohr.BugSharp
@@ -45,5 +48,5 @@ jobs:
 #        working-directory: Jonteohr.BugSharp
       
       - name: Push to Github packages
-        run: dotnet nuget push ./bin/Release/*.nupkg --api-key ${{ secrets.GH_PACKAGES_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+        run: dotnet nuget push ./bin/Release/*.nupkg --api-key ${{ secrets.GH_PACKAGES_TOKEN }} --source github
         working-directory: Jonteohr.BugSharp
