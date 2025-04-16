@@ -48,9 +48,9 @@ jobs:
         run: dotnet test --no-build --verbosity normal
         working-directory: Jonteohr.BugSharp
         
-#      - name: Push to NuGet.org
-#        run: dotnet nuget push ./bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API }} --source https://api.nuget.org/v3/index.json
-#        working-directory: Jonteohr.BugSharp
+      - name: Push to NuGet.org
+        run: dotnet nuget push ./bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API }} --source https://api.nuget.org/v3/index.json
+        working-directory: Jonteohr.BugSharp
       
       - name: Push to Github packages
         run: dotnet nuget push ./bin/Release/*.nupkg --api-key ${{ secrets.GH_PACKAGES_TOKEN }} --source github
