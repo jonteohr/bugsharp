@@ -33,7 +33,7 @@ jobs:
           fi
 
       - name: Add GitHub NuGet source
-        run: dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --name github --username ${{ github.actor }} --password ${{ secrets.GH_PACKAGES_TOKEN }} --store-password-in-clear-text
+        run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --name github --username ${{ github.actor }} --password ${{ secrets.GH_PACKAGES_TOKEN }} --store-password-in-clear-text
 
       - name: Build and generate NuGet package
         run: dotnet build bugsharp.csproj --configuration Release /p:GeneratePackageOnBuild=true /p:Version=${{ env.PACKAGE_VERSION }}
