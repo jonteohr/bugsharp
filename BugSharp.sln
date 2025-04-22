@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.csproj", "{499280D2-39BB-4500-A108-B1591BFCA496}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bugsharp", "Jonteohr.BugSharp\bugsharp.csproj", "{7AB60D8A-8A09-4660-B73B-073DC1AED79C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jonteohr.BugSharp", "Jonteohr.BugSharp\Jonteohr.BugSharp.csproj", "{7AB60D8A-8A09-4660-B73B-073DC1AED79C}"
 EndProject
 
 Global
