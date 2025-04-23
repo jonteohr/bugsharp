@@ -168,4 +168,15 @@ public class BugTest
 
         Assert.That(bug.CompareToRemote(), Has.Count.EqualTo(0));
     }
+
+    [Test]
+    public void BugSearch_ShouldSerialize()
+    {
+        var bugSearch = _client.CreateSearch();
+        bugSearch.Status = "A status";
+        bugSearch.Component = "component";
+        bugSearch.QuickSearch = "status:unco";
+
+        Assert.That(bugSearch.ToQueryString(), Is.EqualTo("component=component&status=A+status&quicksearch=status%3Aunco"));
+    }
 }
