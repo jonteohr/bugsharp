@@ -1,5 +1,6 @@
 using BugSharp;
 using BugSharp.Remote;
+using Moq;
 using Newtonsoft.Json;
 
 namespace Jonteohr.BugSharp.Test;
@@ -11,7 +12,7 @@ public class BugTest
     [SetUp]
     public void Setup()
     {
-        _client = new TestableBugzilla();
+        _client = TestableBugzilla.Create();
     }
 
     [Test]
@@ -178,5 +179,40 @@ public class BugTest
         bugSearch.QuickSearch = "status:unco";
 
         Assert.That(bugSearch.ToQueryString(), Is.EqualTo("component=component&status=A+status&quicksearch=status%3Aunco"));
+    }
+
+    [Test]
+    public async Task BugSearch_ShouldGenerateSearch()
+    {
+        var bugSearch = _client.CreateSearch();
+        bugSearch.QuickSearch = "status:unco";
+
+        var returnsList = new List<Bug>
+        {
+            new Bug(_client)
+            {
+                Status = "unconfirmed",
+                Summary = "Bug 1"
+            },
+            new Bug(_client)
+            {
+                Status = "unconfirmed",
+                Summary = "Bug 2"
+            }
+        };
+        
+        _client.BugService.Setup(service => service.SearchBugsAsync(It.IsAny<BugSearch>()))
+            .ReturnsAsync(returnsList);
+
+        var result = await bugSearch.SearchBugsAsync();
+        
+        Assert.That(result, Has.Count.EqualTo(2));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result[0].Status, Is.EqualTo("unconfirmed"));
+            Assert.That(result[0].Summary, Is.EqualTo("Bug 1"));
+            Assert.That(result[1].Status, Is.EqualTo("unconfirmed"));
+            Assert.That(result[1].Summary, Is.EqualTo("Bug 2"));
+        });
     }
 }
