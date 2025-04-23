@@ -11,6 +11,9 @@ namespace BugSharp
         private readonly ConcurrentDictionary<Type, object> _services;
         private readonly ConcurrentDictionary<Type, object> _factories;
         
+        /// <summary>
+        /// Constructor for the service locator class
+        /// </summary>
         public ServiceLocator()
         {
             _services = new ConcurrentDictionary<Type, object>();
