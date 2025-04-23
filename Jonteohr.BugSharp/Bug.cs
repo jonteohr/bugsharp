@@ -232,7 +232,7 @@ namespace BugSharp
             };
         }
 
-        private Dictionary<string, object> CompareToRemote()
+        internal Dictionary<string, object> CompareToRemote()
         {
             var diffs = new Dictionary<string, object>();
 
