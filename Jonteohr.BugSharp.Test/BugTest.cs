@@ -1,5 +1,6 @@
 using BugSharp;
 using BugSharp.Remote;
+using Newtonsoft.Json;
 
 namespace Jonteohr.BugSharp.Test;
 
@@ -66,5 +67,19 @@ public class BugTest
             Assert.That(bug.CustomFields["key"], Is.EqualTo("a value"));
             Assert.That(bug.TargetMilestone, Is.EqualTo("target"));
         });
+    }
+
+    [Test]
+    public void Bug_ShouldSerializeChangesOnly()
+    {
+        var bug = new Bug(_client);
+
+        bug.Summary = "A new summary";
+
+        var changes = JsonConvert.DeserializeObject<Dictionary<string, string>>(bug.SerializeChanges());
+        
+        Assert.That(changes, Is.Not.Null);
+        Assert.That(changes, Has.Count.EqualTo(1));
+        Assert.That(changes["summary"], Is.EqualTo("A new summary"));
     }
 }
