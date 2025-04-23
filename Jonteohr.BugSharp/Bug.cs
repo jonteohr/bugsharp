@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BugSharp.Remote;
 using Newtonsoft.Json;
 
+[assembly:InternalsVisibleTo("Jonteohr.BugSharp.Test")]
 namespace BugSharp
 {
     /// <summary>
@@ -186,7 +188,7 @@ namespace BugSharp
             
             return serverBug;
         }
-
+        
         internal string SerializeChanges()
         {
             var changes = CompareToRemote();
@@ -230,7 +232,7 @@ namespace BugSharp
             };
         }
 
-        private Dictionary<string, object> CompareToRemote()
+        internal Dictionary<string, object> CompareToRemote()
         {
             var diffs = new Dictionary<string, object>();
 
