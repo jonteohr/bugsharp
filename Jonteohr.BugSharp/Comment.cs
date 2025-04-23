@@ -45,7 +45,7 @@ namespace BugSharp
             Count = remoteComment.count;
             AttachmentId = remoteComment.attachment_id ?? -1;
             IsPrivate = remoteComment.is_private;
-            Tags = remoteComment.tags.ToList();
+            Tags = remoteComment.tags != null ? remoteComment.tags.ToList() : new List<string>();
             Creator = remoteComment.creator;
             CreationTime = remoteComment.creation_time;
             Id = remoteComment.id;

@@ -50,7 +50,7 @@ namespace BugSharp
             Creator = remoteAttachment.creator;
             IsPrivate = remoteAttachment.is_private;
             BugId = remoteAttachment.bug_id;
-            Flags = remoteAttachment.flags.ToList();
+            Flags = remoteAttachment.flags != null ? remoteAttachment.flags.ToList() : new List<Flag>();
             Comment = remoteAttachment.comment;
         }
         
