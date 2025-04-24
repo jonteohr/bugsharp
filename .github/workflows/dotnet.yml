@@ -39,5 +39,5 @@ jobs:
       working-directory: Jonteohr.BugSharp
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release
+      run: dotnet test --verbosity normal --configuration Release
       working-directory: Jonteohr.BugSharp.Test
