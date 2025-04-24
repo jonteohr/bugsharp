@@ -35,7 +35,7 @@ jobs:
         fi
       
     - name: Build and generate NuGet package
-      run: dotnet build jonteohr.bugsharp.csproj --configuration Release /p:GeneratePackageOnBuild=true /p:Version=${{ env.PACKAGE_VERSION }}
+      run: dotnet build Jonteohr.BugSharp.csproj --configuration Release /p:GeneratePackageOnBuild=true /p:Version=${{ env.PACKAGE_VERSION }}
       working-directory: Jonteohr.BugSharp
 
     - name: Test
