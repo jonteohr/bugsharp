@@ -5,7 +5,7 @@ namespace BugSharp.Exceptions
     /// <summary>
     /// The generic exception thrown whenever a call failed due to some reason explained in the message
     /// </summary>
-    public class BugZillaRequestException : Exception
+    public class BugZillaRequestException : BugZillaException
     {
         /// <summary>
         /// Create a new exception
