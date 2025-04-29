@@ -18,8 +18,8 @@ public class UserTest
     {
         _client.UserService.Setup(service => service.Logout(It.IsAny<string>()));
         _client.UserService.Setup(service => service.Login(It.IsAny<string>(), It.IsAny<string>()))
-            .ReturnsAsync(new User(1, "username", "token"));
-
+            .ReturnsAsync(new User(1, "username", "a-bbCCww"));
+        
         var user = await _client.Users.Login("MyUser", "MyPassword");
         
         await _client.Users.Logout(user.Token);

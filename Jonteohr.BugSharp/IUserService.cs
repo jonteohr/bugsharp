@@ -22,6 +22,11 @@ namespace BugSharp
         /// <seealso cref="Logout"/>
         Task<User> Login(string username, string password);
 
+        /// <summary>
+        /// Log out the user. Basically it invalidates the token provided so it cannot be re-used. Does nothing if the token is not in use. Will also clear any existing authentication cookies the client may still have stored.
+        /// </summary>
+        /// <param name="token">The user’s token used for authentication</param>
+        /// <returns>Nothing, regardless of success or failure.</returns>
         Task Logout(string token);
 
         Task<bool> Validate(string username, string token);
