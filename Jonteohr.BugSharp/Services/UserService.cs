@@ -30,9 +30,10 @@ namespace BugSharp.Services
             return returnUser;
         }
 
-        public Task Logout(string token)
+        public async Task Logout(string token)
         {
-            throw new NotImplementedException();
+            var parameters = $"token={token}";
+            await GetAsync(Endpoints.Logout, parameters, _bugZilla.Settings.ApiKey);
         }
 
         public Task<bool> Validate(string username, string token)

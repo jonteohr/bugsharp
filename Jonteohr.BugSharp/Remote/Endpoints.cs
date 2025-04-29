@@ -12,7 +12,8 @@
         Timezone,
         Extensions,
         Time,
-        Login
+        Login,
+        Logout
     }
     
     internal static class EndpointsExtension 
@@ -42,6 +43,8 @@
                     return "field/bug/" + urlParams;
                 case Endpoints.Login:
                     return "login?" + urlParams;
+                case Endpoints.Logout:
+                    return "logout?" + urlParams;
                 default:
                 case Endpoints.BugSearch:
                     return "bug?" + urlParams;
