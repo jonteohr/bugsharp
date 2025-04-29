@@ -35,7 +35,7 @@ namespace BugSharp
         /// The builder to create a <see cref="BugZilla"/> client with a specific API key
         /// </summary>
         /// <param name="url">URL to the base bugzilla instance</param>
-        /// <param name="apiKey">OPTIONAL: API key if necessary to access information</param>
+        /// <param name="apiKey">API key to access information</param>
         /// <exception cref="BugZillaException">If the server URL is invalid</exception>
         public static BugZilla Create(string url, string apiKey)
         {
@@ -115,6 +115,17 @@ namespace BugSharp
             get
             {
                 return Services.Get<IBugzillaInformation>();
+            }
+        }
+
+        /// <summary>
+        /// Used to query the API for user information and/or management
+        /// </summary>
+        public IUserService Users
+        {
+            get
+            {
+                return Services.Get<IUserService>();
             }
         }
 
@@ -200,6 +211,7 @@ namespace BugSharp
             service.Register<IComponentService>(() => new ComponentService(bugZilla));
             service.Register<IFieldService>(() => new FieldService(bugZilla));
             service.Register<IBugzillaInformation>(() => new BugzillaService(bugZilla));
+            service.Register<IUserService>(() => new UserService(bugZilla));
         }
     }
 }

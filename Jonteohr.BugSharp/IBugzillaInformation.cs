@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace BugSharp
 {
     /// <summary>
-    /// The bugzilla service information service
+    /// The bugzilla information service
     /// </summary>
     public interface IBugzillaInformation
     {
