@@ -11,6 +11,7 @@ public class TestableBugzilla : BugZilla
     public Mock<IFieldService> FieldService;
     public Mock<IBugzillaInformation> BugzillaService;
     public Mock<ICommentService> CommentService;
+    public Mock<IUserService> UserService;
     
     public TestableBugzilla() : base(new ServiceLocator(), new BugZillaSettings(null, null))
     {
@@ -20,6 +21,7 @@ public class TestableBugzilla : BugZilla
         FieldService = new Mock<IFieldService>();
         BugzillaService = new Mock<IBugzillaInformation>();
         CommentService = new Mock<ICommentService>();
+        UserService = new Mock<IUserService>();
         
         Services.Register<IBugService>(() => BugService.Object);
         Services.Register<IAttachmentService>(() => AttachmentService.Object);
@@ -27,6 +29,7 @@ public class TestableBugzilla : BugZilla
         Services.Register<IFieldService>(() => FieldService.Object);
         Services.Register<IBugzillaInformation>(() => BugzillaService.Object);
         Services.Register<ICommentService>(() => CommentService.Object);
+        Services.Register<IUserService>(() => UserService.Object);
     }
 
     public static TestableBugzilla Create()
