@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BugSharp.Remote;
 using Newtonsoft.Json;
 
+[assembly:InternalsVisibleTo("Jonteohr.BugSharp.Test")]
 namespace BugSharp
 {
     /// <summary>
@@ -46,6 +48,7 @@ namespace BugSharp
             Resolution = remoteBug.resolution;
             QAContact = remoteBug.qa_contact;
             Version = remoteBug.version;
+            Keywords = remoteBug.keywords;
             Cc = remoteBug.cc;
             Platform = remoteBug.platform;
             Classification = remoteBug.classification;
@@ -100,6 +103,11 @@ namespace BugSharp
         /// The version this bug was found on
         /// </summary>
         public string Version { get; set; }
+        
+        /// <summary>
+        /// Each keyword that is on this bug.
+        /// </summary>
+        public List<string> Keywords { get; set; }
         
         /// <summary>
         /// A list of contacts that are notofied of any changes
@@ -186,7 +194,7 @@ namespace BugSharp
             
             return serverBug;
         }
-
+        
         internal string SerializeChanges()
         {
             var changes = CompareToRemote();
@@ -218,6 +226,7 @@ namespace BugSharp
                 last_change_time = Changed,
                 qa_contact = QAContact,
                 target_milestone = TargetMilestone,
+                keywords = Keywords,
                 cc = Cc,
                 classification = Classification,
                 component = Component,
@@ -230,7 +239,7 @@ namespace BugSharp
             };
         }
 
-        private Dictionary<string, object> CompareToRemote()
+        internal Dictionary<string, object> CompareToRemote()
         {
             var diffs = new Dictionary<string, object>();
 
@@ -250,6 +259,9 @@ namespace BugSharp
             Compare(QAContact, _originalBug.qa_contact, "qa_contact");
             Compare(Version, _originalBug.version, "version");
 
+            if (!AreListsEqual(Keywords, _originalBug.keywords))
+                diffs["keywords"] = Keywords;
+            
             if (!AreListsEqual(Cc, _originalBug.cc))
                 diffs["cc"] = Cc;
 

@@ -25,6 +25,11 @@ var client = BugZilla.Create("URL_TO_BUGZILLA", "OPTIONAL_API_KEY");
 ```csharp
 var bug = await client.Bugs.GetBugAsync(123); // 123 being a single bug ID
 Console.WriteLine($"Bug summary: {bug.Summary}");
+
+// Make a modification to the bug
+bug.Summary = "A new summary, because you're worth it.";
+// Save it to the server
+var newBug = await bug.SaveChangesAsync();
 ```
 
 #### Get several bugs:
@@ -47,12 +52,18 @@ var results = await search.SearchBugsAsync();
 Console.WriteLine($"Found {results.Count} bugs matching the search criteria!");
 ```
 
+#### Get server information
+```csharp
+var version = await client.Information.GetVersion();
+Console.WriteLine(version);
+```
+
 ## Supports
 List of implemented API calls from [Bugzilla Rest API](https://bugzilla.readthedocs.io/en/5.2/api/core/v1/index.html)
 - ✅ Attachments
 - ✅ Bugs
   - ✅ Bug Search
-- ❌ Bugzilla Information
+- ✅ Bugzilla Information
 - ❌ Classifications
 - ✅ Comments
 - ✅ Components

@@ -7,7 +7,11 @@
         Comment,
         Attachment,
         Component,
-        Field
+        Field,
+        Version,
+        Timezone,
+        Extensions,
+        Time
     }
     
     internal static class EndpointsExtension 
@@ -22,12 +26,10 @@
                     return "bug/" + id + "/comment";
                 case Endpoints.Attachment:
                     return "bug/attachment/" + id;
-                case Endpoints.Component:
-                    return "component";
                 case Endpoints.Field:
                     return "field/bug/" + (id != -1 ? id.ToString() : "");
                 default:
-                    return string.Empty;
+                    return endpoint.ToString().ToLower();
             }
         }
         

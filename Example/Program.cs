@@ -2,8 +2,14 @@
 
 class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main()
     {
-        new BugZillaExample();
+        var exampleApp = new BugZillaExample();
+        
+        var bugInput = Console.ReadLine();
+        if(!int.TryParse(bugInput, out var bugId))
+            Console.WriteLine("Not a valid number");
+        
+        await exampleApp.DoBugzillaStuffAsync(bugId);
     }
 }

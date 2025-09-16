@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  publish_nuget:
 
     runs-on: ubuntu-latest
 
@@ -32,14 +32,26 @@ jobs:
             echo "PACKAGE_VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_ENV
           fi
 
+      - name: Add GitHub NuGet source
+        run: |
+          dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
+          --name github \
+          --username ${{ github.actor }} \
+          --password ${{ secrets.GH_PACKAGES_TOKEN }} \
+          --store-password-in-clear-text
+          
       - name: Build and generate NuGet package
-        run: dotnet build bugsharp.csproj --configuration Release /p:GeneratePackageOnBuild=true /p:Version=${{ env.PACKAGE_VERSION }}
+        run: dotnet build Jonteohr.BugSharp.csproj --configuration Release /p:GeneratePackageOnBuild=true /p:Version=${{ env.PACKAGE_VERSION }}
         working-directory: Jonteohr.BugSharp
         
       - name: Test
-        run: dotnet test --no-build --verbosity normal
-        working-directory: Jonteohr.BugSharp
+        run: dotnet test --verbosity normal --configuration Release
+        working-directory: Jonteohr.BugSharp.Test
         
-      - name: Push to NuGet
+      - name: Push to NuGet.org
         run: dotnet nuget push ./bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API }} --source https://api.nuget.org/v3/index.json
+        working-directory: Jonteohr.BugSharp
+      
+      - name: Push to Github packages
+        run: dotnet nuget push ./bin/Release/*.nupkg --api-key ${{ secrets.GH_PACKAGES_TOKEN }} --source github
         working-directory: Jonteohr.BugSharp

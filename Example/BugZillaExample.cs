@@ -8,16 +8,12 @@ public class BugZillaExample
     
     public BugZillaExample()
     {
-        _bugZilla = BugZilla.Create("URL_TO_BUGZILLA", "OPTIONAL_API_KEY");
-
-        var bugInput = Console.ReadLine();
-        if(!int.TryParse(bugInput, out var bugId))
-            Console.WriteLine("Not a valid number");
-        
-        DoBugzillaStuff(bugId);
+        // Can also be instantiated with API keys using the overload:
+        // _bugZilla = BugZilla.Create("URL_TO_BUGZILLA", "MY_API_KEY");
+        _bugZilla = BugZilla.Create("URL_TO_BUGZILLA");
     }
 
-    private async void DoBugzillaStuff(int bugId)
+    public async Task DoBugzillaStuffAsync(int bugId)
     {
         // Fetch the bug from bugzilla
         var bug = await _bugZilla.Bugs.GetBugAsync(bugId);

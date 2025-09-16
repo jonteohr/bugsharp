@@ -1,4 +1,6 @@
-﻿using BugSharp.Services;
+﻿using System;
+using BugSharp.Exceptions;
+using BugSharp.Services;
 
 namespace BugSharp
 {
@@ -20,12 +22,29 @@ namespace BugSharp
         }
 
         /// <summary>
-        /// The builder to create a BugZilla client
+        /// The builder to create a <see cref="BugZilla"/> client
+        /// </summary>
+        /// <param name="url">URL to the base bugzilla instance</param>
+        /// <exception cref="BugZillaException">If the server URL is invalid</exception>
+        public static BugZilla Create(string url)
+        {
+            return Create(url, string.Empty);
+        }
+
+        /// <summary>
+        /// The builder to create a <see cref="BugZilla"/> client with a specific API key
         /// </summary>
         /// <param name="url">URL to the base bugzilla instance</param>
         /// <param name="apiKey">OPTIONAL: API key if necessary to access information</param>
-        public static BugZilla Create(string url, string apiKey = null)
+        /// <exception cref="BugZillaException">If the server URL is invalid</exception>
+        public static BugZilla Create(string url, string apiKey)
         {
+            var result = Uri.TryCreate(url, UriKind.Absolute, out var uri)
+                && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+
+            if (!result)
+                throw new BugZillaException("The URL to the bugzilla server instance is invalid.");
+            
             var settings = new BugZillaSettings(url, apiKey);
             var services = new ServiceLocator();
             var client = new BugZilla(services, settings);
@@ -78,13 +97,24 @@ namespace BugSharp
         }
 
         /// <summary>
-        /// THe service that handles bug fields
+        /// The service that handles bug fields
         /// </summary>
         public IFieldService Fields
         {
             get
             {
                 return Services.Get<IFieldService>();
+            }
+        }
+
+        /// <summary>
+        /// Used to get general configuration information about the remote Bugzilla instance
+        /// </summary>
+        public IBugzillaInformation Information
+        {
+            get
+            {
+                return Services.Get<IBugzillaInformation>();
             }
         }
 
@@ -169,6 +199,7 @@ namespace BugSharp
             service.Register<IAttachmentService>(() => new AttachmentService(bugZilla));
             service.Register<IComponentService>(() => new ComponentService(bugZilla));
             service.Register<IFieldService>(() => new FieldService(bugZilla));
+            service.Register<IBugzillaInformation>(() => new BugzillaService(bugZilla));
         }
     }
 }
