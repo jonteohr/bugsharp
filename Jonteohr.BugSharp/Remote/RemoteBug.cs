@@ -23,6 +23,8 @@ namespace BugSharp.Remote
         
         public string version { get; set; }
         
+        public List<string> keywords { get; set; }
+        
         public List<string> cc { get; set; }
         
         public string platform { get; set; }
