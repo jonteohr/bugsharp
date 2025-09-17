@@ -89,5 +89,20 @@ namespace BugSharp
         /// </summary>
         /// <seealso cref="Version"/>
         public List<Version> Milestones { get; set; }
+
+        /// <summary>
+        /// Saves a product on the remote BugZilla server.
+        /// </summary>
+        /// <exception cref="BugZillaRequestException">Thrown if a comment with that ID already exists. This property must be unset to properly function.</exception>
+        public async Task<Product> SaveChangesAsync()
+        {
+            if (!string.IsNullOrEmpty(_originalProduct.id.ToString()))
+                throw new BugZillaRequestException("The product with id " + Id + " already exists on the server.");
+
+            await _bugZilla.Products.UpdateProduct(this);
+            var product = await _bugZilla.Products.GetProduct(Id);
+
+            return product;
+        }
     }
 }

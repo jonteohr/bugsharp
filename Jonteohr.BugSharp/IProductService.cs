@@ -8,5 +8,6 @@ namespace BugSharp
         Task<List<int>> ListProducts();
         Task<Product> GetProduct(int id);
         Task<Product> GetProduct(string name);
+        Task UpdateProduct(Product product);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BugSharp.Exceptions;
@@ -31,6 +30,11 @@ namespace BugSharp.Services
         public async Task<Product> GetProduct(int id) => await GetProductGeneric(id);
 
         public async Task<Product> GetProduct(string name) => await GetProductGeneric(name);
+        public async Task UpdateProduct(Product product)
+        {
+            var json = JsonConvert.SerializeObject(product);
+            await PutAsync(Endpoints.Product, product.Id, _bugZilla.Settings.ApiKey, json);
+        }
 
         private async Task<Product> GetProductGeneric(object param)
         {
