@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace BugSharp.Services
 
         public Task<int> CreateCommentAsync(Comment comment)
         {
-            throw new RowNotInTableException();
+            throw new NotImplementedException();
         }
     }
 }
