@@ -1,4 +1,7 @@
-﻿namespace BugSharp.Remote
+﻿using System;
+using System.Net;
+
+namespace BugSharp.Remote
 {
     internal enum Endpoints
     {
@@ -11,7 +14,9 @@
         Version,
         Timezone,
         Extensions,
-        Time
+        Time,
+        ProductList,
+        Product
     }
     
     internal static class EndpointsExtension 
@@ -28,6 +33,10 @@
                     return "bug/attachment/" + id;
                 case Endpoints.Field:
                     return "field/bug/" + (id != -1 ? id.ToString() : "");
+                case Endpoints.ProductList:
+                    return "product_accessible";
+                case Endpoints.Product:
+                    return "product/" + (id != -1 ? id.ToString() : "");
                 default:
                     return endpoint.ToString().ToLower();
             }
@@ -35,13 +44,17 @@
         
         public static string ToUri(this Endpoints endpoint, string urlParams)
         {
+            var urlEncodedParam = Uri.EscapeDataString(urlParams);
+            
             switch (endpoint)
             {
                 case Endpoints.Field:
-                    return "field/bug/" + urlParams;
+                    return "field/bug/" + urlEncodedParam;
+                case Endpoints.Product:
+                    return "product?names=" + urlEncodedParam;
                 default:
                 case Endpoints.BugSearch:
-                    return "bug?" + urlParams;
+                    return "bug?" + urlEncodedParam;
             }
         }
     }

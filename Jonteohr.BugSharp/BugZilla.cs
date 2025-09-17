@@ -119,6 +119,17 @@ namespace BugSharp
         }
 
         /// <summary>
+        /// This part of the Bugzilla API allows you to list the available products and get information about them.
+        /// </summary>
+        public IProductService Products
+        {
+            get
+            {
+                return Services.Get<IProductService>();
+            }
+        }
+
+        /// <summary>
         /// The ServiceLocator handling all services.
         /// </summary>
         public ServiceLocator Services
@@ -200,6 +211,7 @@ namespace BugSharp
             service.Register<IComponentService>(() => new ComponentService(bugZilla));
             service.Register<IFieldService>(() => new FieldService(bugZilla));
             service.Register<IBugzillaInformation>(() => new BugzillaService(bugZilla));
+            service.Register<IProductService>(() => new ProductService(bugZilla));
         }
     }
 }
