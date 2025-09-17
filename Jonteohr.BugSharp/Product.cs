@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BugSharp.Exceptions;
 using BugSharp.Remote;
+using Newtonsoft.Json;
 
 namespace BugSharp
 {
@@ -93,16 +93,68 @@ namespace BugSharp
         /// <summary>
         /// Saves a product on the remote BugZilla server.
         /// </summary>
-        /// <exception cref="BugZillaRequestException">Thrown if a comment with that ID already exists. This property must be unset to properly function.</exception>
         public async Task<Product> SaveChangesAsync()
         {
-            if (!string.IsNullOrEmpty(_originalProduct.id.ToString()))
-                throw new BugZillaRequestException("The product with id " + Id + " already exists on the server.");
-
             await _bugZilla.Products.UpdateProduct(this);
             var product = await _bugZilla.Products.GetProduct(Id);
 
             return product;
+        }
+        
+        internal Dictionary<string, object> CompareToRemote()
+        {
+            var diffs = new Dictionary<string, object>();
+
+            void Compare<T>(T current, T original, string remoteName)
+            {
+                if (!EqualityComparer<T>.Default.Equals(current, original))
+                {
+                    diffs[remoteName] = current;
+                }
+            }
+
+            Compare(Id, _originalProduct.id, "id");
+            Compare(Name, _originalProduct.name, "name");
+            Compare(Description, _originalProduct.description, "description");
+            Compare(IsActive, _originalProduct.is_active, "is_active");
+            Compare(DefaultMilestone, _originalProduct.default_milestone, "default_milestone");
+            Compare(HasUnconfirmed, _originalProduct.has_unconfirmed, "has_unconfirmed");
+            Compare(Classification, _originalProduct.classification, "classification");
+
+            if (!AreListsEqual(Components, _originalProduct.components.ToList()))
+                diffs["components"] = Components;
+            
+            if (!AreListsEqual(Versions, _originalProduct.versions.ToList()))
+                diffs["versions"] = Versions;
+            
+            if (!AreListsEqual(Milestones, _originalProduct.milestones.ToList()))
+                diffs["milestones"] = Milestones;
+
+            return diffs;
+        }
+
+        private static bool AreListsEqual<T>(List<T> a, List<T> b)
+        {
+            if (a == null && b == null) return true;
+            if (a == null || b == null) return false;
+            if (a.Count != b.Count) return false;
+            return a.SequenceEqual(b);
+        }
+        
+        internal string SerializeChanges()
+        {
+            var changes = CompareToRemote();
+            if (changes.Count == 0)
+                return string.Empty;
+
+            var jsonSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
+            
+            var json = JsonConvert.SerializeObject(changes, jsonSettings);
+
+            return json;
         }
     }
 }

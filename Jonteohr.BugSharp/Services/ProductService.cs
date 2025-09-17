@@ -32,7 +32,7 @@ namespace BugSharp.Services
         public async Task<Product> GetProduct(string name) => await GetProductGeneric(name);
         public async Task UpdateProduct(Product product)
         {
-            var json = JsonConvert.SerializeObject(product);
+            var json = product.SerializeChanges();
             await PutAsync(Endpoints.Product, product.Id, _bugZilla.Settings.ApiKey, json);
         }
 
