@@ -70,5 +70,5 @@ List of implemented API calls from [Bugzilla Rest API](https://bugzilla.readthed
 - ✅ Bug Fields
 - ❌ Flag Types
 - ❌ Groups
-- ❌ Products
+- ✅ Products
 - ❌ Users
