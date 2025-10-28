@@ -54,7 +54,7 @@ namespace BugSharp.Remote
                     return "product?names=" + urlEncodedParam;
                 default:
                 case Endpoints.BugSearch:
-                    return "bug?" + urlEncodedParam;
+                    return "bug?" + urlParams;
             }
         }
     }

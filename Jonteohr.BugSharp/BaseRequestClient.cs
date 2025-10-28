@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using BugSharp.Exceptions;
 using BugSharp.Remote;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace BugSharp
@@ -21,6 +24,9 @@ namespace BugSharp
                 req.AddQueryParameter("api_key", apiKey);
         
             var response = await client.ExecuteAsync(req);
+
+            HandleRequestExceptions(response);
+            
             return response.Content;
         }
         
@@ -32,6 +38,9 @@ namespace BugSharp
                 req.AddQueryParameter("api_key", apiKey);
         
             var response = await client.ExecuteAsync(req);
+
+            HandleRequestExceptions(response);
+            
             return response.Content;
         }
         
@@ -43,6 +52,9 @@ namespace BugSharp
                 req.AddQueryParameter("api_key", apiKey);
         
             var response = await client.ExecuteAsync(req);
+
+            HandleRequestExceptions(response);
+            
             return response.Content;
         }
 
@@ -69,6 +81,17 @@ namespace BugSharp
 
             var response = await client.ExecuteAsync(req);
             return response.Content;
+        }
+        
+        private void HandleRequestExceptions(RestResponse response)
+        {
+            var result = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Content);
+            if (!result.TryGetValue("error", out var errorNode) ||
+                !bool.TryParse(errorNode.ToString(), out var error)) return;
+            if (!error) return;
+            
+            if(result.TryGetValue("message", out var message))
+                throw new BugZillaRequestException(message.ToString());
         }
     }
 }
